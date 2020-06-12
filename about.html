@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />    
+<title>ArcadeROM</title>  
+<meta name="title" content="About" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Bebas+Neue|Scope+One">
+<style>
+
+body {
+	background-image: url(tile.png), linear-gradient(0deg, rgba(10,10,10,1) 0%, rgba(128,128,128,1) 50%, rgba(190,190,190,1) 100%);
+	background-blend-mode: overlay;
+}
+
+.myContainer {
+  position: relative;
+  width: 960px;
+  border: 2px groove #888888;
+  margin: auto;
+  padding: 4px;
+  
+  background: rgb(37,37,43);
+  background: -moz-radial-gradient(circle, rgba(37,37,43,1) 0%, rgba(68,80,98,1) 84%, rgba(131,145,166,1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(37,37,43,1) 0%, rgba(68,80,98,1) 84%, rgba(131,145,166,1) 100%);
+  background: radial-gradient(circle, rgba(37,37,43,1) 0%, rgba(68,80,98,1) 84%, rgba(131,145,166,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#25252b",endColorstr="#8391a6",GradientType=1);
+}
+
+.myHeader {
+  border-width:1px;  
+  border-style:outset;
+  background-color: #000000;
+  background-image: url('logo.png');
+  background-repeat: no-repeat;
+  height: 130px;
+}
+
+.myPanel {
+  font-family: 'Scope One', serif;
+  font-size: 20px;
+  text-shadow: 2px 2px 2px #aaa;
+  text-align:justify;
+  border: 1px ridge #BBCCCC;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #F0F0FF; 
+  display: table-cell;
+  width: 5%;
+  background: rgb(153,153,153);
+  background: -moz-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+  background: linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#999999",endColorstr="#ffffff",GradientType=1);
+}
+
+.myRow {
+  float: none;
+  width: 100%;
+}
+
+.menuItem {
+  font-family: 'Bebas Neue', serif;
+  font-size: 32px;
+  text-shadow: 2px 2px 2px #aaa;
+  text-align:center;
+  border: 1px ridge #BBCCCC;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #888888; 
+  width: 128px;
+  float: right;
+}
+
+.menuItem a:hover {
+  background-color: #BBBBBB; 
+}
+
+</style>
+</head>
+<body>
+
+<div class="myContainer">
+
+<!-- Title bar -->  
+  <div class="myHeader"/>
+   
+  </div>
+  
+<!-- Menu links -->    
+
+   <div class="menuItem">
+		<a href="about.html" class="menuItem" style="text-decoration:none;color:black;"><div stile = "float:right;">About</div></a>	
+   </div>
+   <div class="menuItem">
+		<a href="blog_menu.html" class="menuItem" style="text-decoration:none;color:black;"><div stile = "float:right;">Blog</div></a>	
+   </div>
+  <div class="menuItem">
+		<a href="index.html" class="menuItem" style="text-decoration:none;color:black;"><div  stile = "float:right;">Home</div></a>
+   </div>
+
+ 
+  
+  <div class="myRow">
+
+    <div class="myPanel">
+	  <div style="float:left;padding-left:50px;width:800px;height:600px">
+		<h3>About</h3>
+		<p>These web pages are dedicated to my game dev projects.
+		   Projects are mostly developed for the Android platform and are available at <a href="https://play.google.com/store/apps/developer?id=ArcadeRom">Google Play</a>.
+		</p>
+		<br>
+		e-mail:
+		<br>
+		<canvas id="myCanvas" width="200" height="64">
+		Your browser does not support the canvas element.
+		</canvas>
+		<script>
+		var canvas = document.getElementById("myCanvas");
+		var ctx = canvas.getContext("2d");
+		var str = "arcaderom";
+		str += "@";
+		str += "gmx.com";
+		ctx.font = "20px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(str,canvas.width/2, canvas.height/2);
+		</script>
+		
+	  </div>
+    </div>
+    
+  </div>
+  
+
+
+
+</div>
+
+<p style="text-align: right; color: white; margin-right: 15%;">&copy; 2020 ArcadeRom</p>
+
+</body>
+</html>
