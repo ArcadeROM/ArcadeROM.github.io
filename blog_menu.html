@@ -38,6 +38,9 @@ body {
 }
 
 .myPanel {
+
+  padding: 10px;
+
   font-family: 'Scope One', serif;
   font-size: 20px;
   text-shadow: 2px 2px 2px #aaa;
@@ -45,8 +48,7 @@ body {
   border: 1px ridge #BBCCCC;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #F0F0FF; 
-  display: table-cell;
-  width: 5%;
+ display:flex;
   background: rgb(153,153,153);
   background: -moz-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
   background: -webkit-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
@@ -55,7 +57,7 @@ body {
 }
 
 .myRow {
-  float: none;
+  clear: both;
   width: 100%;
 }
 
@@ -89,13 +91,13 @@ body {
 <!-- Menu links -->    
 
    <div class="menuItem">
-		<a href="about.html" class="menuItem" style="text-decoration:none;color:black;"><div stile = "float:right;">About</div></a>	
+		<a href="about.html" class="menuItem" style="text-decoration:none;color:black;">About</a>	
    </div>
    <div class="menuItem">
-		<a href="blog_menu.html" class="menuItem" style="text-decoration:none;color:black;"><div stile = "float:right;">Blog</div></a>	
+		<a href="blog_menu.html" class="menuItem" style="text-decoration:none;color:black;">Blog</a>	
    </div>
   <div class="menuItem">
-		<a href="index.html" class="menuItem" style="text-decoration:none;color:black;"><div  stile = "float:right;">Home</div></a>
+		<a href="index.html" class="menuItem" style="text-decoration:none;color:black;">Home</a>
    </div>
 
  
@@ -103,10 +105,9 @@ body {
   <div class="myRow">
 
     <div class="myPanel">
-	  <div style="float:left;padding-left:50px;width:800px;height:64px">
-		<h3>Blog Posts</h3>
+	  
+      <h3>Blog Posts</h3>
 	
-	  </div>
     </div>
     
   </div>
@@ -115,18 +116,19 @@ body {
 
     <div class="myPanel">
     
-	  <div style="float:left;padding-left:50px;width:550px;height:256px">
+	  <div style="margin:10px;width:500px;float:left;">
 		<h3> <a href="blog/tools_run_frost.html"> Tools used in the Run Frost Run development</a></h3>
 		<p>	
 			The game is based on the Godot engine. All game assets were created using free or open source software. 
 			In this post I would like to give the credit to the tools used in the development.
 		</p>
-	  </div>
-	  <div style="padding-top:50px;padding-right:50px;float:right;">
-			<img src="blog/frost_gimp.png" style="display:block;margin-left:auto;margin-right:auto;width:256px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+		</div>
+
+	  <div style="padding-top:1px;padding-right:1px;margin:1px;width:300px;">
+			<img src="blog/frost_gimp.png" style="margin-left:50px;margin-right:auto;width:256px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 	  </div>
 	  
-    </div>
+    
     
   </div>
   
