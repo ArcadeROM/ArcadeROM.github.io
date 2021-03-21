@@ -1,0 +1,7 @@
+[0203/114522.783:ERROR:directory_reader_win.cc(43)] FindFirstFile: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/114522.797:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Andrej\AppData\Local\AVG\Browser\User Data\Crashpad\attachments\ee01188c-290a-4da4-a030-f5d39683945a: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/114522.802:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Andrej\AppData\Local\AVG\Browser\User Data\Crashpad\attachments\fcf818f9-8363-4b3a-a9e4-03635180f162: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/114522.807:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Andrej\AppData\Local\AVG\Browser\User Data\Crashpad\attachments\de366cd1-b690-4ed9-9c98-092a5a1b5fc8: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/114522.811:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Andrej\AppData\Local\AVG\Browser\User Data\Crashpad\attachments\3d8d454c-c0bc-4daa-b669-8480e2d1a17b: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/114522.816:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Andrej\AppData\Local\AVG\Browser\User Data\Crashpad\attachments\1dec607f-43e4-4766-8914-9fc6d83b449a: Systém nemôe nájs zadanú cestu. (0x3)
+[0203/174313.573:ERROR:directory_reader_win.cc(43)] FindFirstFile: Systém nemôe nájs zadanú cestu. (0x3)

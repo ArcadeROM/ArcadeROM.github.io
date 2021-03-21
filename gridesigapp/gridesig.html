@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<body onload="myFunction()">
+
+<input type="file" id="myFile" multiple size="50" onchange="myFunction()">
+
+<div id="tile_bar">
+
+<div id="tiles"></div> 
+
+
+<p id="outputmsg"></p>
+</div> 
+  
+<script>
+var file_array = [];
+var file_names = [];
+
+function readNextFile(index, files){
+	if (files.length > index){
+		var file = files[index];
+        if ('size' in file) {
+			var fr = new FileReader(); 
+			fr.readAsText(file); 
+			fr.onload=function(){ 
+				file_array.push(fr.result);
+				file_names.push(file.name);
+				readNextFile(++index, files);
+                //console.log(fr.result);
+                if (index == files.length)
+					addToTileList();
+            } 
+        }
+     }
+}
+
+function addToTileList(){
+	for(i = 0, len = file_array.length; i < len; i++){
+		var s = file_array.pop();
+		var filename = file_names.pop();
+		var url = ""
+		var name = ""
+		var js = JSON.parse(s, function (key, value) {
+			//console.log(key);
+			  if (key == "src") {
+				url = value;
+				//console.log(result);
+			  } 
+			  if (key == "name") {
+				name = value;
+				//console.log(result);
+			  } 
+			  return 0;
+			});
+		/**/
+		console.log(js);
+		if (url != "")
+			document.getElementById("tiles").innerHTML += "<img src="+ url +" width="+64+" height="+64+"style="+"float:left"+"> <br>" + name + "<br>"
+														+ "<input type="+"radio"+" id="+name+" value="+filename+" ><label for="+name+">"+filename+"</label>";
+	}
+}
+
+function myFunction(){
+  var x = document.getElementById("myFile");
+  var txt = "";
+  if ('files' in x) {
+    if (x.files.length == 0) {
+      txt = "Select one or more files.";
+    } else {
+      for (var i = 0; i < x.files.length; i++) {
+        txt += "<br><strong>" + (i+1) + ". tile</strong><br>";
+        var file = x.files[i];
+        if ('name' in file) {
+          txt += "name: " + file.name + "<br>";
+        }
+      }
+      readNextFile(0, x.files)
+    }
+  } else {
+    if (x.value == "") {
+      txt += "Select one or more files.";
+    } else {
+      txt += "The files property is not supported by your browser!";
+      txt  += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead. 
+    }
+  }
+  document.getElementById("outputmsg").innerHTML = txt; 
+}
+</script>
+
+<p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
+
+</body>
+</html>

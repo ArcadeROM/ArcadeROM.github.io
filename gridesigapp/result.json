@@ -1,0 +1,13 @@
+{"tile": {
+    "image": { 
+	"name": "pingu",
+        "src": "pingu.png",
+        "hOffset": 0,
+        "vOffset": 0,
+        "width": 32,
+	"height": 32
+    },
+    "debug": {
+        "collisions": false
+    }
+}} 
