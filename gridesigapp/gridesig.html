@@ -3,18 +3,48 @@
 <body onload="myFunction()">
 
 <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
-
-<div id="tile_bar">
-
+<p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
+<br>
+<div id="tile_bar" style="width: 128px;float: left;">
+<form>
 <div id="tiles"></div> 
-
+</form>
 
 <p id="outputmsg"></p>
 </div> 
-  
+
+<canvas id="myCanvas" width="1024" height="800" style="border:1px solid #000000;">
+Your browser does not support the HTML canvas tag.
+</canvas>
+
+ 
 <script>
 var file_array = [];
 var file_names = [];
+var elem = document.getElementById('myCanvas'),
+    elemLeft = elem.offsetLeft + elem.clientLeft,
+    elemTop = elem.offsetTop + elem.clientTop,
+    context = elem.getContext('2d');
+
+// Add event listener for `click` events.
+elem.addEventListener('click', function(event) {
+    var x = event.pageX - elemLeft,
+        y = event.pageY - elemTop;
+        
+    const rbs = document.querySelectorAll('input[name="tile"]');
+    let selectedValue;
+    for (const rb of rbs) {
+        if (rb.checked) {
+           selectedValue = rb.value;
+           break;
+        }
+    }
+
+    var img = document.getElementById(selectedValue);
+	context.drawImage(img,10,10);
+
+}, false);
+
 
 function readNextFile(index, files){
 	if (files.length > index){
@@ -55,8 +85,8 @@ function addToTileList(){
 		/**/
 		console.log(js);
 		if (url != "")
-			document.getElementById("tiles").innerHTML += "<img src="+ url +" width="+64+" height="+64+"style="+"float:left"+"> <br>" + name + "<br>"
-														+ "<input type="+"radio"+" id="+name+" value="+filename+" ><label for="+name+">"+filename+"</label>";
+			document.getElementById("tiles").innerHTML += "<div style=\"margin-top:30px;border-style: groove;\"><img id=\""+filename+"\" src="+ url +" width=\"64\" height=\"64\" style=\"float:clear;filter:none;\"> <div> " + name + "<br>"
+														+ "<input type=\"radio\" name=\"tile\" id=\""+name+"\" value=\""+filename+"\" ><label for=\""+filename+"\">"+filename+"</label></div></div>";
 	}
 }
 
@@ -87,8 +117,6 @@ function myFunction(){
   document.getElementById("outputmsg").innerHTML = txt; 
 }
 </script>
-
-<p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
 
 </body>
 </html>
