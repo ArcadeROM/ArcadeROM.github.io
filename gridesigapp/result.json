@@ -1,11 +1,11 @@
 {"tile": {
     "image": { 
 	"name": "pingu",
-        "src": "pingu.png",
+        "src": "sprite_sheet512.png",
         "hOffset": 0,
-        "vOffset": 0,
-        "width": 32,
-	"height": 32
+        "vOffset": 256,
+        "width": 256,
+	"height": 256
     },
     "debug": {
         "collisions": false

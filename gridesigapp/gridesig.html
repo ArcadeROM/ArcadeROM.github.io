@@ -25,8 +25,7 @@ var elem = document.getElementById('myCanvas'),
     elemLeft = elem.offsetLeft + elem.clientLeft,
     elemTop = elem.offsetTop + elem.clientTop,
     context = elem.getContext('2d');
-
-// Add event listener for `click` events.
+// Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
     var x = event.pageX - elemLeft,
         y = event.pageY - elemTop;
@@ -39,9 +38,12 @@ elem.addEventListener('click', function(event) {
            break;
         }
     }
+    if (typeof selectedValue !== 'undefined'){
 
-    var img = document.getElementById(selectedValue);
-	context.drawImage(img,10,10);
+		console.log("canvasID"+selectedValue);
+		var img_canv = document.getElementById("canvasID"+selectedValue);
+		context.drawImage(img_canv, 64, 64);
+	}
 
 }, false);
 
@@ -65,11 +67,14 @@ function readNextFile(index, files){
 }
 
 function addToTileList(){
-	for(i = 0, len = file_array.length; i < len; i++){
+	//for(i = 0, len = file_array.length; i < len; i++){
+	if (file_array.length > 0){
 		var s = file_array.pop();
 		var filename = file_names.pop();
 		var url = ""
 		var name = ""
+		var width, height, vOffset, hOffset;
+
 		var js = JSON.parse(s, function (key, value) {
 			//console.log(key);
 			  if (key == "src") {
@@ -80,13 +85,72 @@ function addToTileList(){
 				name = value;
 				//console.log(result);
 			  } 
+			  if (key == "width") {
+				width = value;
+			  } 
+			  if (key == "height") {
+				height = value;
+			  } 
+			  if (key == "hOffset") {
+				hOffset = value;
+			  } 
+			  if (key == "vOffset") {
+				vOffset = value;
+			  } 
 			  return 0;
 			});
 		/**/
-		console.log(js);
-		if (url != "")
-			document.getElementById("tiles").innerHTML += "<div style=\"margin-top:30px;border-style: groove;\"><img id=\""+filename+"\" src="+ url +" width=\"64\" height=\"64\" style=\"float:clear;filter:none;\"> <div> " + name + "<br>"
+		console.log(url);
+		
+		if (url != ""){
+			var img = new Image();
+			img.src = url;//URL.createObjectURL(e.target.files[0]);
+			
+			img.onload = function() {
+			
+				var canvas = document.createElement('canvas');
+				canvas.setAttribute("id", "canvasID"+name);
+				
+				var ctx = canvas.getContext('2d');
+				canvas.width = 64;//img.width;
+				canvas.height = 64;// img.height;
+				var oc = document.createElement('canvas'),
+					octx = oc.getContext('2d');
+					oc.setAttribute("id", "ocID"+name);
+
+				oc.width = width;//img.width * 0.5;
+				oc.height = height;//img.height * 0.5;
+				octx.drawImage(img, hOffset, vOffset, width, height, 0, 0, width, height);
+				ctx.drawImage(oc, 0, 0, canvas.width, canvas.height);
+				
+				console.log("canvasID"+name);
+				
+				var newDiv = document.createElement("div");
+				// and give it some content
+				
+				radioHtml = "<input type=\"radio\" name=\"tile\"  value=\""+name+"\" ><label for=\""+filename+"\">"+filename+"</label></div></div>";
+				var canvasDiv = document.createElement("div");
+				canvasDiv.style.cssFloat = "none";
+				newDiv.style.border = "thin groove #AAAAAA";
+				var newContent = document.createElement("div");
+				// add the text node to the newly created div
+				newContent.innerHTML = radioHtml;
+				canvasDiv.appendChild(canvas);
+				newDiv.appendChild(canvasDiv);
+				newDiv.appendChild(document.createTextNode(name));
+				newDiv.appendChild(newContent);
+				document.getElementById('tiles').appendChild(newDiv); 
+			
+				
+			/*	
+				document.getElementById("tiles").innerHTML += "<div style=\"margin-top:30px;border-style: groove;\"><div style=\"width:"+width+"px;height:"+height+"px;overflow:hidden;\"><img id=\""+
+														filename+"\" src=\""+ dataurl +"\" style=\"float:clear;width:"+width+"px;height:"+height+"px;margin:-"+vOffset+"px "+(image_width-hOffset-width)+"px "+(image_height-vOffset-height)+"px -"+hOffset+"px\"> <div> <div> " + name + "<br>"
 														+ "<input type=\"radio\" name=\"tile\" id=\""+name+"\" value=\""+filename+"\" ><label for=\""+filename+"\">"+filename+"</label></div></div>";
+	*/
+			}
+		}
+		
+		addToTileList();
 	}
 }
 
