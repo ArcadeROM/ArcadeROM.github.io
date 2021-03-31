@@ -1,13 +1,28 @@
-{"tile": {
-    "image": { 
-	"name": "pingu",
-        "src": "sprite_sheet512.png",
-        "hOffset": 0,
-        "vOffset": 256,
-        "width": 256,
-	"height": 256
-    },
-    "debug": {
-        "collisions": false
-    }
-}} 
+{"tiles":[
+	{
+		"ID":"gnome",
+		"image": { 
+			"src": "sprite_sheet512.png",
+			"hOffset": 0,
+			"vOffset": 256,
+			"width": 256,
+			"height": 256
+		},
+		"debug": {
+			"collisions": "off"
+		}
+	}, 
+	{
+		"ID":"mudtile",
+		"image": { 
+			"src": "pingu.png",
+			"hOffset": 0,
+			"vOffset": 0,
+			"width": 32,
+			"height": 32
+		},
+		"debug": {
+			"collisions": "off"
+		}
+	} 
+]}

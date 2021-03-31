@@ -1,13 +1,15 @@
-{"tile": {
-    "image": { 
-	"name": "mudtile",
-        "src": "mudtile.png",
-        "hOffset": 0,
-        "vOffset": 0,
-        "width": 16,
-	"height": 16
-    },
-    "debug": {
-        "collisions": true
-    }
-}} 
+{"tiles":[
+	{
+		"ID":"mudtile",
+		"image": { 
+			"src": "mudtile.png",
+			"hOffset": 0,
+			"vOffset": 0,
+			"width": 16,
+			"height": 16
+		},
+		"debug": {
+			"collisions": "floor"
+		}
+	} 
+]}
