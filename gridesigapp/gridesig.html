@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body onload="myFunction()">
+<body onload="myFunction(); init_canvas();">
 
 <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
 <p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
@@ -13,7 +13,7 @@
 <p id="outputmsg"></p>
 </div> 
 
-<canvas id="myCanvas" width="1024" height="800" style="border:1px solid #000000;">
+<canvas id="myCanvas" style="border:1px solid #000000;">
 Your browser does not support the HTML canvas tag.
 </canvas>
 
@@ -21,14 +21,25 @@ Your browser does not support the HTML canvas tag.
 <script>
 const icon_res = 64;
 
-var tile_IDs = [];
-
-var file_array = [];
-var file_names = [];
+////////////////////////////////////////////////////////////////////////////////
+/*
+	hlavny "canvas"
+*/
+var canv_width = 1024,
+	canv_height = 800;
+	
 var elem = document.getElementById('myCanvas'),
-    elemLeft = elem.offsetLeft + elem.clientLeft,
-    elemTop = elem.offsetTop + elem.clientTop,
+    elemLeft,
+    elemTop,
     context = elem.getContext('2d');
+	
+function init_canvas(){
+	elem.width = canv_width;
+	elem.height = canv_height;
+	elemLeft = elem.offsetLeft + elem.clientLeft;
+    elemTop = elem.offsetTop + elem.clientTop;
+}
+
 // Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
     var x = event.pageX - elemLeft,
@@ -50,7 +61,14 @@ elem.addEventListener('click', function(event) {
 	}
 }, false);
 
+///////////////////////////////////////////////////////////////////////////////
+/*
+nacitavanie .json suborov
 
+*/
+var tile_IDs = [];
+var file_array = [];
+var file_names = [];
 function readNextFile(index, files){
 	if (files.length > index){
 		var file = files[index];
@@ -72,10 +90,6 @@ function readNextFile(index, files){
 var s, filename, myArr;
 
 function addToTileList(index){
-	//console.log("index ="+index);
-	//for(i = 0, len = file_array.length; i < len; i++){
-	
-	//console.log("file_array len="+file_array.length);
 		
 		if ((index < 0) && (file_array.length > 0)){
 			s = file_array.pop();
@@ -125,10 +139,7 @@ function addToTileList(index){
 		
 		if (url != ""){
 			var img = new Image();
-			img.src = url;//URL.createObjectURL(e.target.files[0]);
-			
-			
-			
+			img.src = url;	
 			img.onload = function() {
 			
 			console.log(tile_IDs);
@@ -172,17 +183,10 @@ function addToTileList(index){
 					document.getElementById('tiles').appendChild(newDiv); 
 				
 				} else {
-					var txt = "tile with ID "+name+" already in the list.";
+					var txt = "<p style=\"color:red;\">Warning: Tile with the ID \""+name+"\" already in the list.</p><br>";
+					document.getElementById("outputmsg").innerHTML += txt; 
 				}
-				
 				addToTileList(--index);
-				document.getElementById("outputmsg").innerHTML += txt; 
-				
-			/*	
-				document.getElementById("tiles").innerHTML += "<div style=\"margin-top:30px;border-style: groove;\"><div style=\"width:"+width+"px;height:"+height+"px;overflow:hidden;\"><img id=\""+
-														filename+"\" src=\""+ dataurl +"\" style=\"float:clear;width:"+width+"px;height:"+height+"px;margin:-"+vOffset+"px "+(image_width-hOffset-width)+"px "+(image_height-vOffset-height)+"px -"+hOffset+"px\"> <div> <div> " + name + "<br>"
-														+ "<input type=\"radio\" name=\"tile\" id=\""+name+"\" value=\""+filename+"\" ><label for=\""+filename+"\">"+filename+"</label></div></div>";
-	*/
 			}
 		}
 }
@@ -195,7 +199,7 @@ function myFunction(){
       txt = "Select one or more files.";
     } else {
       for (var i = 0; i < x.files.length; i++) {
-        txt += "<br><strong>" + (i+1) + ". tile</strong><br>";
+        txt += "<br><strong>" + (i+1) + ". file loaded</strong><br>";
         var file = x.files[i];
         if ('name' in file) {
           txt += "name: " + file.name + "<br>";
