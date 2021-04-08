@@ -28,6 +28,9 @@ const icon_res = 64;
 var canv_width = 1024,
 	canv_height = 800;
 	
+var grid = {dx:24, dy:24, origin:[0, 0]};
+var num_lines_x, num_lines_y; 
+	
 var elem = document.getElementById('myCanvas'),
     elemLeft,
     elemTop,
@@ -36,12 +39,63 @@ var elem = document.getElementById('myCanvas'),
 function init_canvas(){
 	elem.width = canv_width;
 	elem.height = canv_height;
-	elemLeft = elem.offsetLeft + elem.clientLeft;
-    elemTop = elem.offsetTop + elem.clientTop;
+    
+    // no of vertical grid lines
+	num_lines_x = Math.floor(canv_width/grid.dx);
+	// no of horizontal grid lines
+	num_lines_y = Math.floor(canv_height/grid.dy);
+	
+	grid.origin = [canv_width/2, canv_height/2];
+	
+	context.strokeStyle = "#000000";
+	context.beginPath();
+	context.moveTo(grid.origin[0], 0);
+	context.lineTo(grid.origin[0], canv_height);
+	context.stroke();
+	context.beginPath();
+	context.moveTo(0, grid.origin[1]);
+	context.lineTo(canv_width, grid.origin[1]);
+	context.stroke();
+	context.strokeStyle = "#bbbbbb";
+	// Draw grid lines along X-axis
+	var i = grid.origin[0] + grid.dx, j = grid.origin[1] + grid.dy;
+	while(i < canv_width){
+		context.beginPath();
+		context.moveTo(i, 0);
+		context.lineTo(i, canv_height);
+		context.stroke();
+		i = i + grid.dx;
+	}
+	i = grid.origin[0] - grid.dx
+	while(i > 0){
+		context.beginPath();
+		context.moveTo(i, 0);
+		context.lineTo(i, canv_height);
+		context.stroke();
+		i = i - grid.dx;
+	}
+	// Draw grid lines along Y-axis
+	while(j < canv_height){
+		context.beginPath();
+		context.moveTo(0, j);
+		context.lineTo(canv_height, j);
+		context.stroke();
+		j = j + grid.dy;
+	}
+	j = grid.origin[1] - grid.dy
+	while(j > 0){
+		context.beginPath();
+		context.moveTo(0, j);
+		context.lineTo(canv_height, j);
+		context.stroke();
+		j = j - grid.dy;
+	}
 }
 
 // Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
+	elemLeft = elem.offsetLeft + elem.clientLeft;
+    elemTop = elem.offsetTop + elem.clientTop;
     var x = event.pageX - elemLeft,
         y = event.pageY - elemTop;
         
@@ -57,7 +111,7 @@ elem.addEventListener('click', function(event) {
 
 		console.log("canvasID"+selectedValue);
 		var img_canv = document.getElementById("canvasID"+selectedValue);
-		context.drawImage(img_canv, icon_res, icon_res);
+		context.drawImage(img_canv, x, y);
 	}
 }, false);
 
