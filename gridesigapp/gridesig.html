@@ -45,8 +45,9 @@ function init_canvas(){
 	// no of horizontal grid lines
 	num_lines_y = Math.floor(canv_height/grid.dy);
 	
-	grid.origin = [canv_width/2, canv_height/2];
+	grid.origin =[canv_width/2, canv_height/2];
 	
+	context.font = "8px Arial";
 	context.strokeStyle = "#000000";
 	context.beginPath();
 	context.moveTo(grid.origin[0], 0);
@@ -64,6 +65,7 @@ function init_canvas(){
 		context.moveTo(i, 0);
 		context.lineTo(i, canv_height);
 		context.stroke();
+		context.fillText((i - grid.origin[0])/grid.dx, i + grid.dx/2, grid.origin[1]);
 		i = i + grid.dx;
 	}
 	i = grid.origin[0] - grid.dx
@@ -78,15 +80,16 @@ function init_canvas(){
 	while(j < canv_height){
 		context.beginPath();
 		context.moveTo(0, j);
-		context.lineTo(canv_height, j);
+		context.lineTo(canv_width, j);
 		context.stroke();
+		context.fillText((j - grid.origin[1])/grid.dy, grid.origin[0], j + grid.dy/2);
 		j = j + grid.dy;
 	}
 	j = grid.origin[1] - grid.dy
 	while(j > 0){
 		context.beginPath();
 		context.moveTo(0, j);
-		context.lineTo(canv_height, j);
+		context.lineTo(canv_width, j);
 		context.stroke();
 		j = j - grid.dy;
 	}
@@ -108,10 +111,11 @@ elem.addEventListener('click', function(event) {
         }
     }
     if (typeof selectedValue !== 'undefined'){
-
-		console.log("canvasID"+selectedValue);
 		var img_canv = document.getElementById("canvasID"+selectedValue);
-		context.drawImage(img_canv, x, y);
+		var i = Math.floor((x - grid.origin[0])/grid.dx);
+		var j = Math.floor((y - grid.origin[1])/grid.dy);
+		console.log(i+", "+j);
+		context.drawImage(img_canv, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
 	}
 }, false);
 
