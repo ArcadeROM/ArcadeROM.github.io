@@ -9,11 +9,11 @@
 			"height": 256
 		},
 		"debug": {
-			"collisions": "off"
+			"collisions": "rect(20, 20, 150, 100)"
 		}
 	}, 
 	{
-		"ID":"mudtile",
+		"ID":"pingu",
 		"image": { 
 			"src": "pingu.png",
 			"hOffset": 0,
@@ -22,7 +22,8 @@
 			"height": 32
 		},
 		"debug": {
-			"collisions": "off"
+			"collisions": "off",
+			"layer": 1
 		}
 	} 
 ]}

@@ -86,6 +86,16 @@ body {
 </head>
 <body>
 
+<div id='testdiv' style='visible:hidden; height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+<script type='text/javascript'>
+    var devicePixelRatio = window.devicePixelRatio || 1,
+	dpi_x = document.getElementById('testdiv').offsetWidth * devicePixelRatio,
+	dpi_y = document.getElementById('testdiv').offsetHeight * devicePixelRatio,
+	scr_w = window.screen.width * window.devicePixelRatio,
+	scr_h = window.screen.height * window.devicePixelRatio;
+	document.write( "screen " + dpi_x + "dpi " + dpi_y + "dpi " + scr_w + "px " + scr_h + "px");
+</script>
+
 <div class="myContainer">
 
 <!-- Title bar -->  
