@@ -62,7 +62,7 @@ body {
 }
 
 .myRow {
-  clear: both;
+  clear: both;  
   width: 100%;
 }
 
@@ -84,16 +84,27 @@ body {
 
 </style>
 </head>
-<body>
+<body onload="myFunction()">
 
 <div id='testdiv' style='visible:hidden; height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+
 <script type='text/javascript'>
+function myFunction(){//musime spustit az po nahrati stranky, aby sme mali pristup ku vs. triedam a elementom
     var devicePixelRatio = window.devicePixelRatio || 1,
 	dpi_x = document.getElementById('testdiv').offsetWidth * devicePixelRatio,
 	dpi_y = document.getElementById('testdiv').offsetHeight * devicePixelRatio,
 	scr_w = window.screen.width * window.devicePixelRatio,
-	scr_h = window.screen.height * window.devicePixelRatio;
-	document.write( "screen " + dpi_x + "dpi " + dpi_y + "dpi " + scr_w + "px " + scr_h + "px");
+	scr_h = window.screen.height * window.devicePixelRatio,
+	size = scr_w / dpi_x;
+	//document.write( "screen " + dpi_x + "dpi " + dpi_y + "dpi " + scr_w + "px " + scr_h + "px " + size);
+	if (size < 10){//pre vsetky elementy z triedy ".myPanel" nastavime aby sa vykr. pod seba
+		const elemList = document.querySelectorAll('.myPanel');
+		elemList.forEach(element => {
+			element.style.display = "block";
+			//console.log("element from myPanel class =" + element);
+		});
+	}
+}
 </script>
 
 <div class="myContainer">
