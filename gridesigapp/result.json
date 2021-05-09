@@ -1,6 +1,6 @@
-{"tiles":[
+{"tile_set":[
 	{
-		"ID":"gnome",
+		"tile_ID":"gnome",
 		"image": { 
 			"src": "sprite_sheet512.png",
 			"hOffset": 0,
@@ -13,7 +13,7 @@
 		}
 	}, 
 	{
-		"ID":"pingu",
+		"tile_ID":"pingu",
 		"image": { 
 			"src": "pingu.png",
 			"hOffset": 0,

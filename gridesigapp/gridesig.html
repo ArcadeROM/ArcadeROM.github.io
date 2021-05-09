@@ -5,21 +5,80 @@
 <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
 <p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
 <br>
-<div id="tile_bar" style="width: 128px;float: left;">
+<div id="tile_bar" style="width: 128px; float: left; display: block; clear: both;">
 <form>
 <div id="tiles"></div> 
 </form>
 
-<p id="outputmsg"></p>
+<p id="outputmsg" ></p>
+
+<br>
+<div id="rotation_bar" style="width: 256px; display: table-row; border-style: groove; float: left; position: sticky;">
+rotation:
+<input type="radio" id="0" name="rotation" value="0" checked="checked">
+<label for="0">0</label>
+<input type="radio" id="90" name="rotation" value="90">
+<label for="90">90</label>
+<input type="radio" id="180" name="rotation" value="180">
+<label for="180">180</label>
+<input type="radio" id="270" name="rotation" value="270">
+<label for="270">270</label>
+</div>
+
 </div> 
+
+
 
 <canvas id="myCanvas" style="border:1px solid #000000;">
 Your browser does not support the HTML canvas tag.
 </canvas>
 
- 
 <script>
 const icon_res = 64;
+
+/*
+	hlavna json struktura do ktorej budeme pridavat ID prvkou a ich suradnice
+*/
+var sceneTiles = new Object();
+sceneTiles.scene_grid = [];
+
+function Tile(id, cell_ind_i, cell_ind_j, rot, flipH, flipV){
+	this.tile_ID = id;//jedinecne id
+    this.cell_ind_i = cell_ind_i;//hor. index buniek ktore obsahuju "tile"
+    this.cell_ind_j = cell_ind_j;//vert. index buniek ktore obsahuju "tile"
+    this.rot = rot;//rotacia 0, 90, 180, 360 stupnov
+    this.flipH = flipH;//preklopenie hor.
+    this.flipV = flipV;//preklopenie vert.
+}
+
+/*
+var tile = {
+	ID : "",
+    cell_ind_i: [],
+    cell_ind_j: [],
+    rot: []
+};
+tile.ID = "tile01";
+tile.cell_ind_i = [10, 30];
+tile.cell_ind_j = [20, 40];
+tile.rot = [90, 0];
+sceneTiles.scene_grid.push(tile);
+var t = new Tile("tile02", [50], [60], [180])
+sceneTiles.scene_grid.push(t);
+var jsonString= JSON.stringify(sceneTiles);
+console.log(jsonString);
+*/
+
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+	save/load "SCENE TILE GRID"
+*/
+
+function saveScene(){
+
+	var jsonString= JSON.stringify(sceneTiles);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /*
@@ -111,17 +170,41 @@ elem.addEventListener('click', function(event) {
         }
     }
     if (typeof selectedValue !== 'undefined'){
-		var img_canv = document.getElementById("canvasID"+selectedValue);
+		var img_canv = document.getElementById("canvasID"+selectedValue);//oznaceny "canvas" v 'tiles' elemente
 		var i = Math.floor((x - grid.origin[0])/grid.dx);
 		var j = Math.floor((y - grid.origin[1])/grid.dy);
 		console.log(i+", "+j);
 		context.drawImage(img_canv, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
+		
+		//oznacena "radiobutto" rotacia
+		let rotValue;
+		for (const rb of document.querySelectorAll('input[name="rotation"]')) {
+			if (rb.checked) {
+			   rotValue = parseInt(rb.value, 10);
+			   break;
+			}
+		}
+		
+		//vrati nam "tile", ktore ma "tile_ID" rovne oznacenho "radiobutton"
+		var tile = sceneTiles.scene_grid.find(el => el.tile_ID == selectedValue);
+		//pridavame do "sceneTiles"
+		if (tile == undefined)
+			sceneTiles.scene_grid.push(new Tile(selectedValue, [i], [j], rotValue, false, false));
+		else {
+			tile.cell_ind_i.push(i);
+			tile.cell_ind_j.push(j);
+			tile.rot = rotValue;//rotacia 0, 90, 180, 360 stupnov
+			tile.flipH = false;//preklopenie hor.
+			tile.flipV = false;//preklopenie vert.
+		}
+		console.log(JSON.stringify(sceneTiles));
 	}
 }, false);
 
 ///////////////////////////////////////////////////////////////////////////////
 /*
 nacitavanie .json suborov
+"TILE SET"
 
 */
 var tile_IDs = [];
@@ -155,9 +238,9 @@ function addToTileList(index){
 			
 			myArr = JSON.parse(s);
 			
-			console.log("myArr len="+myArr.tiles.length);
+			console.log("myArr len="+myArr.tile_set.length);
 			
-			index = myArr.tiles.length - 1;
+			index = myArr.tile_set.length - 1;
 		} else if (index < 0) {
 			return 0;
 		}	
@@ -168,13 +251,13 @@ function addToTileList(index){
 		
 		//console.log("tile ="+myArr.tiles[index]);
 		
-			var js = JSON.parse(JSON.stringify(myArr.tiles[index]), function (key, value) {
+			var js = JSON.parse(JSON.stringify(myArr.tile_set[index]), function (key, value) {
 			//console.log(key);
 			  if (key == "src") {
 				url = value;
 				//console.log(result);
 			  } 
-			  if (key == "ID") {
+			  if (key == "tile_ID") {
 				name = value;
 				//console.log(result);
 			  } 

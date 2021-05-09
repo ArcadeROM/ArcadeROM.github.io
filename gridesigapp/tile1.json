@@ -1,6 +1,6 @@
-{"tiles":[
+{"tile_set":[
 	{
-		"ID":"mudtile",
+		"tile_ID":"mudtile",
 		"image": { 
 			"src": "mudtile.png",
 			"hOffset": 0,
