@@ -5,6 +5,7 @@
 <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
 <p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
 <br>
+<button type="button" onclick="saveScene()">Save</button>
 <div id="tile_bar" style="width: 128px; float: left; display: block; clear: both;">
 <form>
 <div id="tiles"></div> 
@@ -82,10 +83,25 @@ console.log(jsonString);
 /*
 	save/load "SCENE TILE GRID"
 */
+function saveFile(fileName, urlFile){
+    let a = document.createElement("a");
+    a.style = "display: none";
+    document.body.appendChild(a);
+    a.href = urlFile;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(urlFile);
+    a.remove();
+}
+
 
 function saveScene(){
 
-	var jsonString= JSON.stringify(sceneTiles);
+	var jsonString = JSON.stringify(sceneTiles);
+	let blobData = new Blob([jsonString], {type: "text/plain"});
+	let url = window.URL.createObjectURL(blobData);
+//window.open(url);
+	saveFile('archivo.txt', url);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
