@@ -2,19 +2,27 @@
 <html>
 <body onload="myFunction(); init_canvas();">
 
+<p id="outputmsg" ></p>
+
+Load <b>tiles</b> descriptor .json files:
 <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
 <p><strong>Tip:</strong> Use the Control or the Shift key to select multiple files.</p>
 <br>
-<button type="button" onclick="saveScene()">Save</button>
-<div id="tile_bar" style="width: 128px; float: left; display: block; clear: both;">
+
+<div id="tile_bar" style="float: left; display: block; clear: both;">
 <form>
 <div id="tiles"></div> 
 </form>
+</div> 
 
-<p id="outputmsg" ></p>
+<div id="save_load_bar" style="margin-top: 10px; clear: both; border-style: groove; float: left; position: sticky;">
+<b>Scene</b> .json file:
+<button type="button" onclick="saveScene()">Save</button>
+<button type="button" onclick="saveScene()">Load</button>
+</div>
 
 <br>
-<div id="rotation_bar" style="width: 256px; display: table-row; border-style: groove; float: left; position: sticky;">
+<div id="rotation_bar" style="clear: both; width: 256px; display: table-row; border-style: groove; float: left; position: sticky;">
 rotation:
 <input type="radio" id="0" name="rotation" value="0" checked="checked">
 <label for="0">0</label>
@@ -25,18 +33,19 @@ rotation:
 <input type="radio" id="270" name="rotation" value="270">
 <label for="270">270</label>
 </div>
-<div id="flip_bar" style="width: 256px; display: table-row; border-style: groove; float: left; position: sticky;">
+<div id="flip_bar" style="clear: both; width: 256px; display: table-row; border-style: groove; float: left; position: sticky;">
 flip:
 <input type="checkbox" id="Hflip" name="Hflip" value="Hflip">
 <label for="90">hor. flip</label>
 <input type="checkbox" id="Vflip" name="Vflip" value="Vflip" >
 <label for="0">vert. flip</label>
 </div>
+
+
+
 <div> <canvas id="myCanvas" style="border:1px solid #000000;">
 Your browser does not support the HTML canvas tag.
 </canvas></div> 
-
-</div> 
 
 
 
@@ -44,7 +53,6 @@ Your browser does not support the HTML canvas tag.
 
 <script>
 const icon_res = 64;
-
 /*
 	hlavna json struktura do ktorej budeme pridavat ID prvkou a ich suradnice
 */
@@ -59,26 +67,6 @@ function Tile(id, cell_ind_i, cell_ind_j, rot, flipH, flipV){
     this.flipH = flipH;//preklopenie hor.
     this.flipV = flipV;//preklopenie vert.
 }
-
-/*
-var tile = {
-	ID : "",
-    cell_ind_i: [],
-    cell_ind_j: [],
-    rot: []
-};
-tile.ID = "tile01";
-tile.cell_ind_i = [10, 30];
-tile.cell_ind_j = [20, 40];
-tile.rot = [90, 0];
-sceneTiles.scene_grid.push(tile);
-var t = new Tile("tile02", [50], [60], [180])
-sceneTiles.scene_grid.push(t);
-var jsonString= JSON.stringify(sceneTiles);
-console.log(jsonString);
-*/
-
-
 ////////////////////////////////////////////////////////////////////////////////
 /*
 	save/load "SCENE TILE GRID"
@@ -94,16 +82,14 @@ function saveFile(fileName, urlFile){
     a.remove();
 }
 
-
 function saveScene(){
 
 	var jsonString = JSON.stringify(sceneTiles);
 	let blobData = new Blob([jsonString], {type: "text/plain"});
 	let url = window.URL.createObjectURL(blobData);
-//window.open(url);
-	saveFile('archivo.txt', url);
+	saveFile('scene.json', url);
+	document.getElementById("outputmsg").innerHTML = "<b>file scene.json saved</b>"; 
 }
-
 ////////////////////////////////////////////////////////////////////////////////
 /*
 	hlavny "canvas"
@@ -255,7 +241,6 @@ elem.addEventListener('click', function(event) {
 /*
 nacitavanie .json suborov
 "TILE SET"
-
 */
 var tile_IDs = [];
 var file_array = [];
@@ -298,11 +283,8 @@ function addToTileList(index){
 		var url = ""
 		var name = ""
 		var width, height, vOffset, hOffset;
-		
-		//console.log("tile ="+myArr.tiles[index]);
-		
-			var js = JSON.parse(JSON.stringify(myArr.tile_set[index]), function (key, value) {
-			//console.log(key);
+	
+		var js = JSON.parse(JSON.stringify(myArr.tile_set[index]), function (key, value) {
 			  if (key == "src") {
 				url = value;
 				//console.log(result);
@@ -325,8 +307,6 @@ function addToTileList(index){
 			  } 
 			  return 0;
 			});
-		/**/
-		//console.log(url);
 		
 		if (url != ""){
 			var img = new Image();
@@ -350,16 +330,13 @@ function addToTileList(index){
 						octx = oc.getContext('2d');
 						oc.setAttribute("id", "ocID"+name);
 
-					oc.width = width;//img.width * 0.5;
-					oc.height = height;//img.height * 0.5;
+					oc.width = width;
+					oc.height = height;
 					octx.drawImage(img, hOffset, vOffset, width, height, 0, 0, width, height);
 					ctx.drawImage(oc, 0, 0, canvas.width, canvas.height);
 					
-					//console.log("canvasID"+name);
-					
 					var newDiv = document.createElement("div");
-					// and give it some content
-					
+					// and give it some conten	
 					radioHtml = "<input type=\"radio\" name=\"tile\"  value=\""+name+"\" ><label for=\""+filename+"\">"+filename+"</label></div></div>";
 					var canvasDiv = document.createElement("div");
 					canvasDiv.style.cssFloat = "none";
@@ -371,6 +348,7 @@ function addToTileList(index){
 					newDiv.appendChild(canvasDiv);
 					newDiv.appendChild(document.createTextNode(name));
 					newDiv.appendChild(newContent);
+					newDiv.style.cssFloat = "left";
 					document.getElementById('tiles').appendChild(newDiv); 
 				
 				} else {
