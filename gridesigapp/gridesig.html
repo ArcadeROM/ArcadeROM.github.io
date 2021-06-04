@@ -18,7 +18,7 @@ Load <b>tiles</b> descriptor .json files:
 <div id="save_load_bar" style="margin-top: 10px; clear: both; border-style: groove; float: left; position: sticky;">
 <b>Scene</b> .json file:
 <button type="button" onclick="saveScene()">Save</button>
-<button type="button" onclick="saveScene()">Load</button>
+<input type="file" id="file-selector" onchange="loadScene()"> 
 </div>
 
 <br>
@@ -47,11 +47,8 @@ flip:
 Your browser does not support the HTML canvas tag.
 </canvas></div> 
 
-
-
-
-
 <script>
+////////////////////////////////////////////////////////////////////////////////
 const icon_res = 64;
 /*
 	hlavna json struktura do ktorej budeme pridavat ID prvkou a ich suradnice
@@ -71,6 +68,16 @@ function Tile(id, cell_ind_i, cell_ind_j, rot, flipH, flipV){
 /*
 	save/load "SCENE TILE GRID"
 */
+function loadScene(){
+	const fileSelector = document.getElementById('file-selector');
+	var file = fileSelector.files[0]
+	var fr = new FileReader(); 
+			fr.readAsText(file); 
+			fr.onload=function(){ 
+				console.log(fr.result);
+			}
+}
+
 function saveFile(fileName, urlFile){
     let a = document.createElement("a");
     a.style = "display: none";
@@ -83,7 +90,6 @@ function saveFile(fileName, urlFile){
 }
 
 function saveScene(){
-
 	var jsonString = JSON.stringify(sceneTiles);
 	let blobData = new Blob([jsonString], {type: "text/plain"});
 	let url = window.URL.createObjectURL(blobData);
@@ -218,9 +224,7 @@ elem.addEventListener('click', function(event) {
 /*		*/
 		
 		context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
-		
-		
-		
+			
 		//vrati nam "tile", ktore ma "tile_ID" rovne oznacenho "radiobutton"
 		var tile = sceneTiles.scene_grid.find(el => el.tile_ID == selectedValue);
 		//pridavame do "sceneTiles"
