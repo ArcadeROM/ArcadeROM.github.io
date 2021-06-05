@@ -41,8 +41,6 @@ flip:
 <label for="0">vert. flip</label>
 </div>
 
-
-
 <div> <canvas id="myCanvas" style="border:1px solid #000000;">
 Your browser does not support the HTML canvas tag.
 </canvas></div> 
@@ -74,7 +72,8 @@ function loadScene(){
 	var fr = new FileReader(); 
 			fr.readAsText(file); 
 			fr.onload=function(){ 
-				console.log(fr.result);
+				sceneTiles = JSON.parse(fr.result);
+				//console.log(sceneTiles);
 			}
 }
 
