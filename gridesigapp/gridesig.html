@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+</head>
 <body onload="myFunction(); init_canvas();">
 
 <p id="outputmsg" ></p>
@@ -74,6 +77,7 @@ function loadScene(){
 			fr.onload=function(){ 
 				sceneTiles = JSON.parse(fr.result);
 				//console.log(sceneTiles);
+				redraw();
 			}
 }
 
@@ -114,14 +118,20 @@ function init_canvas(){
 	elem.width = canv_width;
 	elem.height = canv_height;
     
-    // no of vertical grid lines
+	grid.origin =[canv_width/2, canv_height/2];
+	
+	context.font = "8px Arial";
+	
+    redraw();
+}
+
+function redraw(){
+	context.clearRect(0, 0, elem.width, elem.height);
+	// no of vertical grid lines
 	num_lines_x = Math.floor(canv_width/grid.dx);
 	// no of horizontal grid lines
 	num_lines_y = Math.floor(canv_height/grid.dy);
 	
-	grid.origin =[canv_width/2, canv_height/2];
-	
-	context.font = "8px Arial";
 	context.strokeStyle = "#000000";
 	context.beginPath();
 	context.moveTo(grid.origin[0], 0);
@@ -169,8 +179,15 @@ function init_canvas(){
 	}
 }
 
+window.addEventListener("keydown", function(event){console.log(event);}, false);
+
 // Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
+
+//if (event && (event.which == 2 || event.button == 4 )) {
+    //console.log(event);
+  //}
+
 	elemLeft = elem.offsetLeft + elem.clientLeft;
     elemTop = elem.offsetTop + elem.clientTop;
     var x = event.pageX - elemLeft,
@@ -218,9 +235,6 @@ elem.addEventListener('click', function(event) {
 		destCtx.rotate(a);
 		destCtx.scale(H_flip, V_flip)
 		destCtx.drawImage(img_canv, -img_canv.width / 2, -img_canv.height / 2, img_canv.width, img_canv.height);
-		//destCtx.rotate(-a);
-		//destCtx.translate(-cx, -cy);
-/*		*/
 		
 		context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
 			
