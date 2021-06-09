@@ -177,9 +177,59 @@ function redraw(){
 		context.stroke();
 		j = j - grid.dy;
 	}
+	
+	//pridavame "tiles" do mriezky
+	sceneTiles.scene_grid.forEach((element) => { 
+		var img_canv = document.getElementById("canvasID"+element.tile_ID);
+		var k;
+		for (k = 0; k < element.cell_ind_i.length; k++) {
+			var i = element.cell_ind_i[k];
+			var j = element.cell_ind_j[k];
+			var rotValue = element.rot[k];
+			var H_flip = element.flipH[k];
+			var V_flip = element.flipV[k];
+			console.log(i + " " + j + " " + H_flip + " " + V_flip);
+			var destCan = document.createElement('canvas'),
+			destCtx = destCan.getContext('2d');//grab the context from your destination canvas
+			destCan.width = img_canv.width;
+			destCan.height = img_canv.height;
+			
+			var cx = img_canv.width / 2;
+			var cy = img_canv.height / 2;
+
+			destCtx.translate(cx, cy);
+			var a = degrees_to_radians(rotValue);
+			destCtx.rotate(a);
+			destCtx.scale(H_flip, V_flip)
+			destCtx.drawImage(img_canv, -img_canv.width / 2, -img_canv.height / 2, img_canv.width, img_canv.height);
+			context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);		
+		}	
+	} );
+	
 }
 
-window.addEventListener("keydown", function(event){console.log(event);}, false);
+// "event" na odchytavanie klaves
+window.addEventListener("keydown", function(event){
+	switch(event.key){
+		case "a":
+			grid.origin[0] -= grid.dx/2;
+			break;
+		case "d":
+			grid.origin[0] += grid.dx/2;
+			break;
+		case "w":
+			grid.origin[1] -= grid.dy/2;
+			break;
+		case "s":
+			grid.origin[1] += grid.dy/2;
+		//	break;
+		//default:
+		// code block
+	}
+	redraw();
+	//console.log(event.key);
+	//console.log(grid);
+}, false);
 
 // Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
