@@ -131,7 +131,7 @@ function redraw(){
 	num_lines_x = Math.floor(canv_width/grid.dx);
 	// no of horizontal grid lines
 	num_lines_y = Math.floor(canv_height/grid.dy);
-	
+		
 	context.strokeStyle = "#000000";
 	context.beginPath();
 	context.moveTo(grid.origin[0], 0);
@@ -178,6 +178,8 @@ function redraw(){
 		j = j - grid.dy;
 	}
 	
+	
+	
 	//pridavame "tiles" do mriezky
 	sceneTiles.scene_grid.forEach((element) => { 
 		var img_canv = document.getElementById("canvasID"+element.tile_ID);
@@ -188,9 +190,9 @@ function redraw(){
 			var rotValue = element.rot[k];
 			var H_flip = element.flipH[k];
 			var V_flip = element.flipV[k];
-			console.log(i + " " + j + " " + H_flip + " " + V_flip);
+			console.log(i + " " + j + " " + H_flip + " " + V_flip + " " + rotValue + " " + img_canv.width);
 			var destCan = document.createElement('canvas'),
-			destCtx = destCan.getContext('2d');//grab the context from your destination canvas
+				destCtx = destCan.getContext('2d');//grab the context from your destination canvas
 			destCan.width = img_canv.width;
 			destCan.height = img_canv.height;
 			
@@ -200,12 +202,23 @@ function redraw(){
 			destCtx.translate(cx, cy);
 			var a = degrees_to_radians(rotValue);
 			destCtx.rotate(a);
-			destCtx.scale(H_flip, V_flip)
-			destCtx.drawImage(img_canv, -img_canv.width / 2, -img_canv.height / 2, img_canv.width, img_canv.height);
-			context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);		
+			destCtx.scale(H_flip ? -1 : 1, V_flip ? -1 : 1)
+/*		*/	destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
+		/*	
+			destCtx.beginPath();
+destCtx.lineWidth = "6";
+destCtx.strokeStyle = "red";
+destCtx.rect(0, 0, 10, 10);
+destCtx.stroke();*/
+			
+			context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);	
+			/*	context.beginPath();
+//context.lineWidth = "6";
+context.strokeStyle = "red";
+context.rect(i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
+context.stroke();*/
 		}	
 	} );
-	
 }
 
 // "event" na odchytavanie klaves
@@ -284,7 +297,7 @@ elem.addEventListener('click', function(event) {
 		var a = degrees_to_radians(rotValue);
 		destCtx.rotate(a);
 		destCtx.scale(H_flip, V_flip)
-		destCtx.drawImage(img_canv, -img_canv.width / 2, -img_canv.height / 2, img_canv.width, img_canv.height);
+		destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
 		
 		context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
 			
