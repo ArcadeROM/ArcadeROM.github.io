@@ -190,7 +190,7 @@ function redraw(){
 			var rotValue = element.rot[k];
 			var H_flip = element.flipH[k];
 			var V_flip = element.flipV[k];
-			console.log(i + " " + j + " " + H_flip + " " + V_flip + " " + rotValue + " " + img_canv.width);
+			//console.log(i + " " + j + " " + H_flip + " " + V_flip + " " + rotValue + " " + img_canv.width);
 			var destCan = document.createElement('canvas'),
 				destCtx = destCan.getContext('2d');//grab the context from your destination canvas
 			destCan.width = img_canv.width;
@@ -202,21 +202,10 @@ function redraw(){
 			destCtx.translate(cx, cy);
 			var a = degrees_to_radians(rotValue);
 			destCtx.rotate(a);
-			destCtx.scale(H_flip ? -1 : 1, V_flip ? -1 : 1)
-/*		*/	destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
-		/*	
-			destCtx.beginPath();
-destCtx.lineWidth = "6";
-destCtx.strokeStyle = "red";
-destCtx.rect(0, 0, 10, 10);
-destCtx.stroke();*/
-			
+			if (H_flip || V_flip)
+				destCtx.scale(H_flip ? -1 : 1, V_flip ? -1 : 1);
+			destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
 			context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);	
-			/*	context.beginPath();
-//context.lineWidth = "6";
-context.strokeStyle = "red";
-context.rect(i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
-context.stroke();*/
 		}	
 	} );
 }
@@ -225,23 +214,47 @@ context.stroke();*/
 window.addEventListener("keydown", function(event){
 	switch(event.key){
 		case "a":
-			grid.origin[0] -= grid.dx/2;
+			grid.origin[0] += icon_res/2;
 			break;
 		case "d":
-			grid.origin[0] += grid.dx/2;
+			grid.origin[0] -= icon_res/2;
 			break;
 		case "w":
-			grid.origin[1] -= grid.dy/2;
+			grid.origin[1] += icon_res/2;
 			break;
 		case "s":
-			grid.origin[1] += grid.dy/2;
+			grid.origin[1] -= icon_res/2;
+			break;
+		case "+":
+			grid.dx *= 2;
+			grid.dy *= 2;
+			if (grid.dx > icon_res){
+				grid.dx = icon_res;
+				grid.dy = icon_res;
+			} else {
+				var ox = grid.origin[0] - canv_width/2;//upravime poziciu stredu
+				var oy = grid.origin[1] - canv_height/2;
+				grid.origin[0] += ox;
+				grid.origin[1] += oy;
+			}
+			break;
+		case "-":
+			grid.dx /= 2;
+			grid.dy /= 2;
+			if (grid.dx < 16){
+				grid.dx = 16;
+				grid.dy = 16;
+			} else {
+				var ox = grid.origin[0] - canv_width/2;//upravime poziciu stredu
+				var oy = grid.origin[1] - canv_height/2;
+				grid.origin[0] -= ox/2;
+				grid.origin[1] -= oy/2;
+			}
 		//	break;
 		//default:
 		// code block
 	}
 	redraw();
-	//console.log(event.key);
-	//console.log(grid);
 }, false);
 
 // Add event listener for `click` events to the CANVAS
@@ -296,7 +309,7 @@ elem.addEventListener('click', function(event) {
 		destCtx.translate(cx, cy);
 		var a = degrees_to_radians(rotValue);
 		destCtx.rotate(a);
-		destCtx.scale(H_flip, V_flip)
+		destCtx.scale(H_flip, V_flip);
 		destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
 		
 		context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
