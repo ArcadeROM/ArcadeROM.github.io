@@ -77,7 +77,43 @@ body {
 
 </style>
 </head>
-<body>
+<body onload="myFunction()">
+<!-- testujeme ci zobrazujeme ma mobile -->  
+<div id='testdiv' style='visible:hidden; height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+<script type='text/javascript'>
+function myFunction(){//musime spustit az po nahrati stranky, aby sme mali pristup ku vs. triedam a elementom
+    var devicePixelRatio = window.devicePixelRatio || 1,
+	dpi_x = document.getElementById('testdiv').offsetWidth * devicePixelRatio,
+	dpi_y = document.getElementById('testdiv').offsetHeight * devicePixelRatio,
+	scr_w = window.screen.width * window.devicePixelRatio,
+	scr_h = window.screen.height * window.devicePixelRatio,
+	size = scr_w / dpi_x;
+	var mail_text_size = 20;
+	if (size < 10){
+		mail_text_size = 32;
+		const elemList = document.querySelectorAll('.myPanel');
+		elemList.forEach(element => {
+			//element.style.display = "block";
+			//console.log("element from myPanel class =" + element);
+			element.style.fontSize = "32px";
+		});
+		const elemList2 = document.querySelectorAll('img');
+		elemList2.forEach(element => {
+			//console.log("element from img class =" + element);
+			element.style.width = "100%";
+		});
+	}
+	
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	var str = "arcaderom";
+	str += "@";
+	str += "gmx.com";
+	ctx.font = mail_text_size + "px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText(str,canvas.width/2, canvas.height/2);
+}
+</script>
 
 <div class="myContainer">
 
@@ -111,19 +147,10 @@ body {
 		<br>
 		e-mail:
 		<br>
-		<canvas id="myCanvas" width="200" height="64">
+		<canvas id="myCanvas" width="400" height="64">
 		Your browser does not support the canvas element.
 		</canvas>
-		<script>
-		var canvas = document.getElementById("myCanvas");
-		var ctx = canvas.getContext("2d");
-		var str = "arcaderom";
-		str += "@";
-		str += "gmx.com";
-		ctx.font = "20px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText(str,canvas.width/2, canvas.height/2);
-		</script>
+		
 		
 	  </div>
     </div>

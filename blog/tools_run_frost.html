@@ -92,15 +92,10 @@ function myFunction(){//musime spustit az po nahrati stranky, aby sme mali prist
 	if (size < 10){
 		const elemList = document.querySelectorAll('.myPanel');
 		elemList.forEach(element => {
-			//pre vsetky elementy z triedy ".myPanel" nastavime aby sa vykr. pod seba
-			element.style.display = "block";
-			//console.log("element from myPanel class =" + element);
 			element.style.fontSize = "32px";
 		});
 		const elemList2 = document.querySelectorAll('img');
 		elemList2.forEach(element => {
-			//pre vsetky elementy z triedy ".myPanel" nastavime aby sa vykr. pod seba
-			//console.log("element from img class =" + element);
 			element.style.width = "100%";
 		});
 	}
