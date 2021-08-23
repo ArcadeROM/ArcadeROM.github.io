@@ -54,8 +54,38 @@ const icon_res = 64;
 /*
 	hlavna json struktura do ktorej budeme pridavat ID prvkou a ich suradnice
 */
-var sceneTiles = new Object();
+var sceneTiles = new Object();//hlavna struktura pre scenu
 sceneTiles.scene_grid = [];
+
+var hash_grid = [];//tabulka 10x10 obsahujuca v bunke modulo i a modulo j "tile_ID" a cell_ind_* pre danu "tile" v strukture
+
+function create_hash_grid(sceneTiles){
+	var x, y;
+	for (x = 0; x < 10; x++){
+		hash_grid[x] = []
+		for (y = 0; y < 10; y++)
+			hash_grid[x][y] = [];
+	}
+	
+	
+	console.log(hash_grid);
+	
+	console.log(hash_grid[4][5]);
+
+	sceneTiles.scene_grid.forEach((element) => { 
+	
+		var k;
+		for (k = 0; k < element.cell_ind_i.length; k++) {
+	
+			var i = element.cell_ind_i[k] % 10;
+			var j = element.cell_ind_j[k] % 10;
+			
+			const entry = Object.freeze([element.tile_ID, k]);
+			
+			hash_grid[i][j].push(entry);
+		}
+	});
+}
 
 function Tile(id, cell_ind_i, cell_ind_j, rot, flipH, flipV){
 	this.tile_ID = id;//jedinecne id
@@ -77,6 +107,8 @@ function loadScene(){
 			fr.onload=function(){ 
 				sceneTiles = JSON.parse(fr.result);
 				//console.log(sceneTiles);
+				create_hash_grid(sceneTiles)
+				console.log(hash_grid);
 				redraw();
 			}
 }
