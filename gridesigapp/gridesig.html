@@ -59,6 +59,28 @@ sceneTiles.scene_grid = [];
 
 var hash_grid = [];//tabulka 10x10 obsahujuca v bunke modulo i a modulo j "tile_ID" a cell_ind_* pre danu "tile" v strukture
 
+function removeTile(i, j){
+	let tilesInCel = hash_grid[Math.abs(i%10)][Math.abs(j%10)]; 
+	let ind_to_rem = -1;
+	for (let k = 0; k < tilesInCel.length; k++){
+		let [id, index, x, y] = tilesInCel[k];
+		if (i == x && j == y){
+				sceneTiles.scene_grid.forEach((element) => { //pehladavame hlavnu strukturu
+					if (element.tile_ID == id){
+						element.cell_ind_i.splice(index, 1);//zmazeme polozku pola
+						element.cell_ind_j.splice(index, 1);
+						rotValue = element.rot.splice(index, 1);
+						H_flip = element.flipH.splice(index, 1);
+						V_flip = element.flipV.splice(index, 1);
+					}
+				});
+			ind_to_rem = k;	
+		}
+	}
+	if (ind_to_rem > 0) 
+			hash_grid[Math.abs(i%10)][Math.abs(j%10)].ind_to_rem(index, 1);
+}
+
 function create_hash_grid(sceneTiles){
 	var x, y;
 	for (x = 0; x < 10; x++){
@@ -67,22 +89,17 @@ function create_hash_grid(sceneTiles){
 			hash_grid[x][y] = [];
 	}
 	
-	
-	console.log(hash_grid);
-	
-	console.log(hash_grid[4][5]);
-
 	sceneTiles.scene_grid.forEach((element) => { 
-	
-		var k;
+		let k;
 		for (k = 0; k < element.cell_ind_i.length; k++) {
-	
-			var i = element.cell_ind_i[k] % 10;
-			var j = element.cell_ind_j[k] % 10;
+			let i = element.cell_ind_i[k];
+			let j = element.cell_ind_j[k];
 			
-			const entry = Object.freeze([element.tile_ID, k]);
+			//console.log("i="+i+";j="+j);
 			
-			hash_grid[i][j].push(entry);
+			const entry = Object.freeze([element.tile_ID, k, i, j]);//budeme ukladat do hasovacej mriezky id-cko, index/poradie v strukture a poziciu v scene
+			
+			hash_grid[Math.abs(i%10)][Math.abs(j%10)].push(entry);
 		}
 	});
 }
@@ -155,6 +172,8 @@ function init_canvas(){
 	context.font = "8px Arial";
 	
     redraw();
+	
+	create_hash_grid(sceneTiles)
 }
 
 function redraw(){
@@ -288,11 +307,26 @@ window.addEventListener("keydown", function(event){
 				grid.origin[0] -= ox/2;
 				grid.origin[1] -= oy/2;
 			}
-		//	break;
+			break;
+		case "r":
+			elemLeft = elem.offsetLeft + elem.clientLeft;
+			elemTop = elem.offsetTop + elem.clientTop;
+			var mx = mousePosition.x - elemLeft,
+				my = mousePosition.y - elemTop;
+			var mi = Math.floor((mx - grid.origin[0])/grid.dx);
+			var mj = Math.floor((my - grid.origin[1])/grid.dy);
+			console.log("mi="+mi+";mj="+mousePosition.y);
+			removeTile(mi, mj);
 		//default:
 		// code block
 	}
 	redraw();
+}, false);
+
+var mousePosition = {x:0, y:0};
+document.addEventListener('mousemove', function(mouseMoveEvent){
+  mousePosition.x = mouseMoveEvent.pageX;
+  mousePosition.y = mouseMoveEvent.pageY;
 }, false);
 
 // Add event listener for `click` events to the CANVAS
