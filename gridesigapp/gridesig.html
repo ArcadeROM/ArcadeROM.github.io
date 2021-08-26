@@ -77,8 +77,8 @@ function removeTile(i, j){
 			ind_to_rem = k;	
 		}
 	}
-	if (ind_to_rem > 0) 
-			hash_grid[Math.abs(i%10)][Math.abs(j%10)].ind_to_rem(index, 1);
+	if (ind_to_rem > -1) 
+			hash_grid[Math.abs(i%10)][Math.abs(j%10)].splice(ind_to_rem, 1);
 }
 
 function create_hash_grid(sceneTiles){
