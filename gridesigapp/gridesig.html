@@ -60,6 +60,7 @@ sceneTiles.scene_grid = [];
 var hash_grid = [];//tabulka 10x10 obsahujuca v bunke modulo i a modulo j "tile_ID" a cell_ind_* pre danu "tile" v strukture
 
 function removeTile(i, j){
+	console.log(hash_grid);
 	let tilesInCel = hash_grid[Math.abs(i%10)][Math.abs(j%10)]; 
 	let ind_to_rem = -1;
 	for (let k = 0; k < tilesInCel.length; k++){
@@ -171,9 +172,9 @@ function init_canvas(){
 	
 	context.font = "8px Arial";
 	
-    redraw();
+    	redraw();
 	
-	create_hash_grid(sceneTiles)
+	create_hash_grid(sceneTiles);
 }
 
 function redraw(){
@@ -315,8 +316,10 @@ window.addEventListener("keydown", function(event){
 				my = mousePosition.y - elemTop;
 			var mi = Math.floor((mx - grid.origin[0])/grid.dx);
 			var mj = Math.floor((my - grid.origin[1])/grid.dy);
-			console.log("mi="+mi+";mj="+mousePosition.y);
+			console.log("x="+mousePosition.x+";y="+mousePosition.y);
+			console.log("i="+mi+";j="+mj);
 			removeTile(mi, mj);
+			create_hash_grid(sceneTiles);
 		//default:
 		// code block
 	}
