@@ -59,7 +59,7 @@ sceneTiles.scene_grid = [];
 
 var hash_grid = [];//tabulka 10x10 obsahujuca v bunke modulo i a modulo j "tile_ID" a cell_ind_* pre danu "tile" v strukture
 
-function removeTile(i, j){
+function removeTile(i, j){//odstrani element z "sceneTiles" a skonstruuje novu "hash_grid"
 	console.log(hash_grid);
 	let tilesInCel = hash_grid[Math.abs(i%10)][Math.abs(j%10)]; 
 	let ind_to_rem = -1;
@@ -78,8 +78,12 @@ function removeTile(i, j){
 			ind_to_rem = k;	
 		}
 	}
-	if (ind_to_rem > -1) 
-			hash_grid[Math.abs(i%10)][Math.abs(j%10)].splice(ind_to_rem, 1);
+	if (ind_to_rem > -1) {
+			//hash_grid[Math.abs(i%10)][Math.abs(j%10)].splice(ind_to_rem, 1);
+			create_hash_grid(sceneTiles);
+			return true;
+	}
+	return false;
 }
 
 function create_hash_grid(sceneTiles){
@@ -95,14 +99,27 @@ function create_hash_grid(sceneTiles){
 		for (k = 0; k < element.cell_ind_i.length; k++) {
 			let i = element.cell_ind_i[k];
 			let j = element.cell_ind_j[k];
-			
-			//console.log("i="+i+";j="+j);
-			
-			const entry = Object.freeze([element.tile_ID, k, i, j]);//budeme ukladat do hasovacej mriezky id-cko, index/poradie v strukture a poziciu v scene
-			
-			hash_grid[Math.abs(i%10)][Math.abs(j%10)].push(entry);
+		
+			hash_grid_add(element.tile_ID, k, i, j);
 		}
 	});
+}
+
+function hash_grid_add(id, k, i, j){//prida polozku do "hash_grid"
+		const entry = Object.freeze([id, k, i, j]);//budeme ukladat do hasovacej mriezky id-cko, index/poradie v strukture a poziciu v scene
+		hash_grid[Math.abs(i%10)][Math.abs(j%10)].push(entry);
+}
+
+function cell_empty(i, j){
+	const grid = hash_grid[Math.abs(i%10)][Math.abs(j%10)];
+	for (var n = 0; n < grid.length; n++) {
+		let item = grid[n];
+		let [id, k, x, y] = item;
+		if (i == x && j == y) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function Tile(id, cell_ind_i, cell_ind_j, rot, flipH, flipV){
@@ -230,8 +247,6 @@ function redraw(){
 		j = j - grid.dy;
 	}
 	
-	
-	
 	//pridavame "tiles" do mriezky
 	sceneTiles.scene_grid.forEach((element) => { 
 		var img_canv = document.getElementById("canvasID"+element.tile_ID);
@@ -273,15 +288,19 @@ window.addEventListener("keydown", function(event){
 	switch(event.key){
 		case "a":
 			grid.origin[0] += icon_res/2;
+			redraw();
 			break;
 		case "d":
 			grid.origin[0] -= icon_res/2;
+			redraw();
 			break;
 		case "w":
 			grid.origin[1] += icon_res/2;
+			redraw();
 			break;
 		case "s":
 			grid.origin[1] -= icon_res/2;
+			redraw();
 			break;
 		case "+":
 			grid.dx *= 2;
@@ -295,6 +314,7 @@ window.addEventListener("keydown", function(event){
 				grid.origin[0] += ox;
 				grid.origin[1] += oy;
 			}
+			redraw();
 			break;
 		case "-":
 			grid.dx /= 2;
@@ -308,6 +328,7 @@ window.addEventListener("keydown", function(event){
 				grid.origin[0] -= ox/2;
 				grid.origin[1] -= oy/2;
 			}
+			redraw();
 			break;
 		case "r":
 			elemLeft = elem.offsetLeft + elem.clientLeft;
@@ -318,12 +339,12 @@ window.addEventListener("keydown", function(event){
 			var mj = Math.floor((my - grid.origin[1])/grid.dy);
 			console.log("x="+mousePosition.x+";y="+mousePosition.y);
 			console.log("i="+mi+";j="+mj);
-			removeTile(mi, mj);
-			create_hash_grid(sceneTiles);
+			if (removeTile(mi, mj)) redraw();
+			
 		//default:
 		// code block
 	}
-	redraw();
+	//redraw();
 }, false);
 
 var mousePosition = {x:0, y:0};
@@ -334,10 +355,6 @@ document.addEventListener('mousemove', function(mouseMoveEvent){
 
 // Add event listener for `click` events to the CANVAS
 elem.addEventListener('click', function(event) {
-
-//if (event && (event.which == 2 || event.button == 4 )) {
-    //console.log(event);
-  //}
 
 	elemLeft = elem.offsetLeft + elem.clientLeft;
     elemTop = elem.offsetTop + elem.clientTop;
@@ -357,51 +374,56 @@ elem.addEventListener('click', function(event) {
 		var i = Math.floor((x - grid.origin[0])/grid.dx);
 		var j = Math.floor((y - grid.origin[1])/grid.dy);
 		console.log(i+", "+j);
-		
-		//riesime rotaciu a preklopenie
-		//oznacena "radiobutto" rotacia
-		let rotValue;
-		for (const rb of document.querySelectorAll('input[name="rotation"]')) {
-			if (rb.checked) {
-			   rotValue = parseInt(rb.value, 10);
-			   break;
-			}
-		}
-		
-		var H_flip = 1, V_flip = 1;//preklopenie
-		
-		if  (document.getElementById("Vflip").checked) V_flip = -1;
-		if  (document.getElementById("Hflip").checked) H_flip = -1;
-		
-		var destCan = document.createElement('canvas'),
-			destCtx = destCan.getContext('2d');//grab the context from your destination canvas
-		destCan.width = img_canv.width;
-		destCan.height = img_canv.height;
-		
-		var cx = img_canv.width / 2;
-		var cy = img_canv.height / 2;
 
-		destCtx.translate(cx, cy);
-		var a = degrees_to_radians(rotValue);
-		destCtx.rotate(a);
-		destCtx.scale(H_flip, V_flip);
-		destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
-		
-		context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
+		if (cell_empty(i, j)){
+			//riesime rotaciu a preklopenie
+			//oznacena "radiobutto" rotacia
+			let rotValue;
+			for (const rb of document.querySelectorAll('input[name="rotation"]')) {
+				if (rb.checked) {
+				   rotValue = parseInt(rb.value, 10);
+				   break;
+				}
+			}
 			
-		//vrati nam "tile", ktore ma "tile_ID" rovne oznacenho "radiobutton"
-		var tile = sceneTiles.scene_grid.find(el => el.tile_ID == selectedValue);
-		//pridavame do "sceneTiles"
-		if (tile == undefined)
-			sceneTiles.scene_grid.push(new Tile(selectedValue, [i], [j], [rotValue], [H_flip == -1], [V_flip == -1]));
-		else {
-			tile.cell_ind_i.push(i);
-			tile.cell_ind_j.push(j);
-			tile.rot.push(rotValue);//rotacia 0, 90, 180, 360 stupnov
-			tile.flipH.push(document.getElementById("Hflip").checked);//preklopenie hor.
-			tile.flipV.push(document.getElementById("Vflip").checked);//preklopenie vert.
+			var H_flip = 1, V_flip = 1;//preklopenie
+			
+			if  (document.getElementById("Vflip").checked) V_flip = -1;
+			if  (document.getElementById("Hflip").checked) H_flip = -1;
+			
+			var destCan = document.createElement('canvas'),
+				destCtx = destCan.getContext('2d');//grab the context from your destination canvas
+			destCan.width = img_canv.width;
+			destCan.height = img_canv.height;
+			
+			var cx = img_canv.width / 2;
+			var cy = img_canv.height / 2;
+
+			destCtx.translate(cx, cy);
+			var a = degrees_to_radians(rotValue);
+			destCtx.rotate(a);
+			destCtx.scale(H_flip, V_flip);
+			destCtx.drawImage(img_canv, -cx, -cy, img_canv.width, img_canv.height);
+			
+			context.drawImage(destCan, i*grid.dx + grid.origin[0], j*grid.dy + grid.origin[1], grid.dx, grid.dy);
+				
+			//vrati nam "tile", ktore ma "tile_ID" rovne oznacenho "radiobutton"
+			var tile = sceneTiles.scene_grid.find(el => el.tile_ID == selectedValue);
+			//pridavame do "sceneTiles"
+			if (tile == undefined){
+				sceneTiles.scene_grid.push(new Tile(selectedValue, [i], [j], [rotValue], [H_flip == -1], [V_flip == -1]));
+				hash_grid_add(selectedValue, 0, i, j);
+			} else {
+				tile.cell_ind_i.push(i);
+				tile.cell_ind_j.push(j);
+				tile.rot.push(rotValue);//rotacia 0, 90, 180, 360 stupnov
+				tile.flipH.push(document.getElementById("Hflip").checked);//preklopenie hor.
+				tile.flipV.push(document.getElementById("Vflip").checked);//preklopenie vert.
+				hash_grid_add(selectedValue, tile.cell_ind_i.length - 1, i, j);
+			}
+			
+			//console.log(JSON.stringify(sceneTiles));
 		}
-		console.log(JSON.stringify(sceneTiles));
 	}
 }, false);
 
