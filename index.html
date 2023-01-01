@@ -55,11 +55,12 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #F0F0FF; 
   display:table-cell;
-  background: rgb(153,153,153);
-  background: -moz-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
-  background: -webkit-linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
-  background: linear-gradient(180deg, rgba(153,153,153,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#999999",endColorstr="#ffffff",GradientType=1);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.75, #EEEEFE), color-stop(0.84, #CACACA));
+  background: -webkit-linear-gradient(top, #EEEEFE 75%, #CACACA 84%);
+  background: -moz-linear-gradient(top, #EEEEFE 75%, #CACACA 84%);
+  background: -o-linear-gradient(top, #EEEEFE 75%, #CACACA 84%);
+  background: -ms-linear-gradient(top, #EEEEFE 75%, #CACACA 84%);
+  background: linear-gradient(to bottom, #EEEEFE 75%, #CACACA 84%);
 }
 
 .myRow {
@@ -211,7 +212,7 @@ function myFunction(){//musime spustit az po nahrati stranky, aby sme mali prist
   </div>
   
 
-  <p style="text-align: right; color: white; margin-right: 15%;">&copy; 2021 ArcadeRom</p>
+  <p style="text-align: right; color: white; margin-right: 15%;">&copy; 2023 ArcadeRom</p>
 
 </div>
 

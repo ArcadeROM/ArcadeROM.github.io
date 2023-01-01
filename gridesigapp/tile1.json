@@ -2,7 +2,7 @@
 	{
 		"tile_ID":"mudtile",
 		"image": { 
-			"src": "mudtile.png",
+			"src": "mudtile1.png",
 			"hOffset": 0,
 			"vOffset": 0,
 			"width": 16,
